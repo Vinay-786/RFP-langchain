@@ -1,0 +1,18 @@
+[project]
+name = "rfp-langchain"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "djangorestframework>=3.16.1",
+    "docx2txt>=0.9",
+    "langchain>=0.3.27",
+    "langchain-community>=0.3.30",
+    "langchain-openai>=0.3.35",
+    "langchain-pinecone>=0.2.12",
+    "pinecone>=7.3.0",
+    "pypdf>=6.1.1",
+    "python-docx>=1.2.0",
+    "python-dotenv>=1.1.1",
+]
