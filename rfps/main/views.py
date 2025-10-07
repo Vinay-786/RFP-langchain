@@ -4,23 +4,31 @@ from rest_framework import viewsets, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Project, RFPDocument
-from .serializers import ProjectSerializer, RFPDocumentSerializer, PromptSerializer, ProjectRAGSerializer
+from .serializers import (
+    ProjectSerializer,
+    RFPDocumentSerializer,
+    PromptSerializer,
+    ProjectRAGSerializer,
+)
 from .utils.rag_service import RAGService
 from langchain_community.document_loaders import Docx2txtLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
+from django.conf import settings
+from pathlib import Path
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
     """
     A ViewSet for viewing and editing Project instances.
     """
+
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
 
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        if 'manager' not in serializer.validated_data:
+        if "manager" not in serializer.validated_data:
             serializer.save(manager=self.request.user)
         else:
             serializer.save()
@@ -32,7 +40,7 @@ class RFPDocumentViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        uploaded_file = self.request.data.get('document_file')
+        uploaded_file = self.request.data.get("document_file")
         original_filename = uploaded_file.name
 
         base_name, file_extension = os.path.splitext(original_filename)
@@ -41,7 +49,7 @@ class RFPDocumentViewSet(viewsets.ModelViewSet):
             uploaded_by=self.request.user,
             file_id=str(uuid.uuid4()),
             filename=base_name,
-            file_type=file_extension.lstrip('.').lower()
+            file_type=file_extension.lstrip(".").lower(),
         )
 
 
@@ -49,13 +57,14 @@ class QueryRAGView(APIView):
     """
     POST endpoint to accept a prompt, query the RAG service, and return the answer.
     """
+
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
         serializer = PromptSerializer(data=request.data)
 
         if serializer.is_valid():
-            user_query = serializer.validated_data['prompt']
+            user_query = serializer.validated_data["prompt"]
 
             try:
                 # Get the RAG chain (initialized only the first time)
@@ -69,17 +78,18 @@ class QueryRAGView(APIView):
                 answer = rag_chain.invoke(user_query)
 
                 # Return the result
-                return Response({
-                    'query': user_query,
-                    'answer': answer
-                }, status=status.HTTP_200_OK)
+                return Response(
+                    {"query": user_query, "answer": answer}, status=status.HTTP_200_OK
+                )
 
             except Exception as e:
                 print(f"RAG Chain Error: {e}")
                 return Response(
-                    {'error': 'An error occurred while querying the knowledge base.',
-                        'details': str(e)},
-                    status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                    {
+                        "error": "An error occurred while querying the knowledge base.",
+                        "details": str(e),
+                    },
+                    status=status.HTTP_500_INTERNAL_SERVER_ERROR,
                 )
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -87,9 +97,10 @@ class QueryRAGView(APIView):
 
 class InsertRAGView(APIView):
     """
-    POST endpoint to take a project ID, retrieve associated documents, 
+    POST endpoint to take a project ID, retrieve associated documents,
     process, and insert chunks into Pinecone.
     """
+
     permission_classes = [permissions.IsAuthenticated]
 
     def post(self, request):
@@ -98,27 +109,25 @@ class InsertRAGView(APIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        project_id = serializer.validated_data['project_id']
+        project_id = serializer.validated_data["project_id"]
 
         try:
             project = Project.objects.get(pk=project_id)
 
             if not project:
                 return Response(
-                    {'error': f"Project with ID {project_id} not found."},
-                    status=status.HTTP_404_NOT_FOUND
+                    {"error": f"Project with ID {project_id} not found."},
+                    status=status.HTTP_404_NOT_FOUND,
                 )
 
-            # In real code: project.documents.all()
             rfp_documents = project.documents.all()
             if not rfp_documents:
                 return Response(
-                    {'message': f"No RFPDocuments found for Project ID {project_id}. Nothing to index."},
-                    status=status.HTTP_200_OK
+                    {
+                        "message": f"No RFPDocuments found for Project ID {project_id}. Nothing to index."
+                    },
+                    status=status.HTTP_200_OK,
                 )
-
-            # 2. Initialize RAG components (Manager and Splitter)
-            # manager = RAGService.get_manager()
 
             text_splitter = RecursiveCharacterTextSplitter(
                 chunk_size=1000, chunk_overlap=200
@@ -126,40 +135,61 @@ class InsertRAGView(APIView):
 
             all_chunked_docs = []
 
-            # 3. Process each document
             for doc in rfp_documents:
-                # doc.document_file.path is required to get the local disk path
-                file_path = doc.document_file.path
+                # This ensures the path is correct regardless of OS
+                file_path = Path(settings.MEDIA_ROOT) / doc.document_file.name
 
-                print(f"🔄 Processing document: {doc.filename}")
+                if not file_path.exists():
+                    print(f"File not found for document {doc.filename}: {file_path}")
+                    # Optionally skip this document or return an error
+                    continue
+
+                print(f"Processing document: {doc.filename} at {file_path}")
 
                 # In a real app, use the file_type (doc.file_type) to select the correct loader.
                 # Example: if doc.file_type == 'pdf': loader = PyPDFLoader(file_path)
-                loader = Docx2txtLoader(file_path)
+                loader = Docx2txtLoader(
+                    str(file_path)
+                )  # Docx2txtLoader expects a string path
                 documents = loader.load()
 
                 chunked_docs = text_splitter.split_documents(documents)
-                print(f"📄 Split into {len(chunked_docs)} chunks.")
+                print(f"Doc Split into {len(chunked_docs)} chunks.")
 
                 all_chunked_docs.extend(chunked_docs)
 
-            # 4. Insert Data into Pinecone
-            print(
-                f"--- Inserting {len(all_chunked_docs)} chunks into Pinecone ---")
+            if not all_chunked_docs:
+                return Response(
+                    {
+                        "message": f"No processable chunks found for Project ID {project_id}. Nothing to insert."
+                    },
+                    status=status.HTTP_200_OK,
+                )
 
+            # 4. Insert Data into Pinecone using RAGService
             result = RAGService.insert_documents(all_chunked_docs)
 
-            return Response({
-                'message': f"Successfully inserted {result.get('inserted_count', len(all_chunked_docs))} chunks for project {project_id}.",
-                'project_id': project_id,
-                'documents_processed': len(rfp_documents)
-            }, status=status.HTTP_200_OK)
+            return Response(
+                {
+                    "message": f"Successfully inserted {result.get('inserted_count', 0)} chunks for project {project_id}.",
+                    "project_id": project_id,
+                    "documents_processed": len(rfp_documents),
+                },
+                status=status.HTTP_200_OK,
+            )
 
+        except Project.DoesNotExist:
+            return Response(
+                {"error": f"Project with ID {project_id} not found in the database."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
         except Exception as e:
             # Catch file access, database connection, or LLM errors
             print(f"RAG Insertion Error: {e}")
             return Response(
-                {'error': 'An error occurred during data insertion.',
-                    'details': str(e)},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {
+                    "error": "An error occurred during data insertion.",
+                    "details": str(e),
+                },
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
