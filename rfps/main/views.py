@@ -11,7 +11,7 @@ from .serializers import (
     ProjectRAGSerializer,
 )
 from .utils.rag_service import RAGService
-from langchain_community.document_loaders import Docx2txtLoader
+from langchain_community.document_loaders import Docx2txtLoader, PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from django.conf import settings
 from pathlib import Path
@@ -140,17 +140,25 @@ class InsertRAGView(APIView):
                 file_path = Path(settings.MEDIA_ROOT) / doc.document_file.name
 
                 if not file_path.exists():
-                    print(f"File not found for document {doc.filename}: {file_path}")
+                    print(
+                        f"File not found for document {doc.filename}: {file_path}")
                     # Optionally skip this document or return an error
                     continue
 
                 print(f"Processing document: {doc.filename} at {file_path}")
 
-                # In a real app, use the file_type (doc.file_type) to select the correct loader.
-                # Example: if doc.file_type == 'pdf': loader = PyPDFLoader(file_path)
-                loader = Docx2txtLoader(
-                    str(file_path)
-                )  # Docx2txtLoader expects a string path
+                if (doc.file_type == 'pdf'):
+                    loader = PyPDFLoader(
+                        str(file_path)
+                    )
+                elif (doc.file_type == 'docx'):
+                    loader = Docx2txtLoader(
+                        str(file_path)
+                    )
+                else:
+                    print(
+                        f"Unsupported file_type '{doc.file_type}' for document. Skipping.")
+                    continue
                 documents = loader.load()
 
                 chunked_docs = text_splitter.split_documents(documents)
