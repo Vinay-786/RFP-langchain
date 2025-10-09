@@ -1,0 +1,11 @@
+Explain criteria and requirements of the request of proposal in the document
+
+"answer": "The Request for Proposal (RFP) outlined in the document includes both General Criteria and Desirable Criteria.
+\n\nThe General Criteria require proposals to be submitted via email in a single PDF file to purchasing@delta.ca
+before the specified closing date and time, with an option to request an email confirmation of receipt.
+The proposal must be signed and include a covering letter or statement similar to the sample in Appendix A.
+\n\nThe Desirable Criteria against which proposals meeting the General Criteria will be further assessed include:
+\n- Proponent Capability and Experience, with a weight of 30% and a minimum score of 18/30.\n- Proposed Solution,
+Methodology, and Work Schedule, with a weight of 30% and a minimum score of 18/30.\n- Fee, with a weight of 40% and
+no specified minimum score.\n\nThe evaluation committee will reject proposals not meeting the General Criteria.
+Even if a proposal meets these, it must meet the minimum scores for certain Desirable Criteria to be considered further."

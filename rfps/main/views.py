@@ -52,6 +52,21 @@ class RFPDocumentViewSet(viewsets.ModelViewSet):
             file_type=file_extension.lstrip(".").lower(),
         )
 
+    def perform_update(self, serializer):
+        uploaded_file = self.request.data.get("document_file")
+
+        update_kwargs = {}
+
+        if uploaded_file:
+            original_filename = uploaded_file.name
+            base_name, file_extension = os.path.splitext(original_filename)
+
+            update_kwargs['filename'] = base_name
+            update_kwargs['file_type'] = file_extension.lstrip(".").lower()
+
+        # Save the instance with any collected updates
+        serializer.save(**update_kwargs)
+
 
 class QueryRAGView(APIView):
     """
@@ -145,7 +160,8 @@ class InsertRAGView(APIView):
                     # Optionally skip this document or return an error
                     continue
 
-                print(f"Processing document: {doc.filename} at {file_path}")
+                print(
+                    f"Processing document: {doc.filename} at {file_path} with {doc.file_type}")
 
                 if (doc.file_type == 'pdf'):
                     loader = PyPDFLoader(
