@@ -11,6 +11,7 @@ from .serializers import (
     ProjectRAGSerializer,
 )
 from .utils.rag_service import RAGService
+from .utils.openai_setup import chat_with_gpt
 from langchain_community.document_loaders import Docx2txtLoader, PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from django.conf import settings
@@ -216,4 +217,24 @@ class InsertRAGView(APIView):
                     "details": str(e),
                 },
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+
+class OpenAIChat(APIView):
+    def post(self, request):
+        messages = request.data.get("messages", [])
+
+        if not isinstance(messages, list) or not messages:
+            return Response(
+                {"error": "messages must be a non-empty list"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            answer = chat_with_gpt(messages)
+            return Response({"response": answer}, status=status.HTTP_200_OK)
+        except Exception as e:
+            return Response(
+                {"error": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )

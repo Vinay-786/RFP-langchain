@@ -1,11 +1,38 @@
-Explain criteria and requirements of the request of proposal in the document
+{
+    "query": "what does the document say about the request of proposal?",
 
-"answer": "The Request for Proposal (RFP) outlined in the document includes both General Criteria and Desirable Criteria.
-\n\nThe General Criteria require proposals to be submitted via email in a single PDF file to purchasing@delta.ca
-before the specified closing date and time, with an option to request an email confirmation of receipt.
-The proposal must be signed and include a covering letter or statement similar to the sample in Appendix A.
-\n\nThe Desirable Criteria against which proposals meeting the General Criteria will be further assessed include:
-\n- Proponent Capability and Experience, with a weight of 30% and a minimum score of 18/30.\n- Proposed Solution,
-Methodology, and Work Schedule, with a weight of 30% and a minimum score of 18/30.\n- Fee, with a weight of 40% and
-no specified minimum score.\n\nThe evaluation committee will reject proposals not meeting the General Criteria.
-Even if a proposal meets these, it must meet the minimum scores for certain Desirable Criteria to be considered further."
+    "answer": "The document states that information gained through the Request for Proposal (RFP) process must only be used
+	for the submission of proposals. It also mentions that information pertaining to the City of Delta obtained by the
+	Proponent as a result of participation in this project is confidential and may not be disclosed without written authorization
+	from the City of Delta."
+}
+
+{
+	"query": "Explain criteria and requirements of the request of proposal in the document",
+
+	"answer": "The Request for Proposal (RFP) outlined in the document includes both General Criteria and Desirable Criteria.
+	\n\nThe General Criteria require proposals to be submitted via email in a single PDF file to purchasing@delta.ca
+	before the specified closing date and time, with an option to request an email confirmation of receipt.
+	The proposal must be signed and include a covering letter or statement similar to the sample in Appendix A.
+	\n\nThe Desirable Criteria against which proposals meeting the General Criteria will be further assessed include:
+	\n- Proponent Capability and Experience, with a weight of 30% and a minimum score of 18/30.\n- Proposed Solution,
+	Methodology, and Work Schedule, with a weight of 30% and a minimum score of 18/30.\n- Fee, with a weight of 40% and
+	no specified minimum score.\n\nThe evaluation committee will reject proposals not meeting the General Criteria.
+	Even if a proposal meets these, it must meet the minimum scores for certain Desirable Criteria to be considered further."
+}
+
+
+
+{
+    "query": "Explain the terms and condition of the request of proposal in the document",
+
+    "answer": "The terms and conditions of the Request for Proposal (RFP) as outlined in the document are as follows:\n\n
+	1. The terms and conditions will apply to the RFP and to any subsequent contract.\n
+	2. Submission of a proposal in response to the RFP indicates acceptance of these
+		terms and any terms included in an addendum issued by the City of Delta.\n
+	3. Provisions in proposals that contradict the terms of the RFP will be treated as if they do not exist.\n\n
+	The document also provides specific terminology definitions:\n
+	- \"Contract\" refers to the written agreement resulting from this RFP executed by the City of Delta and the Consultant.\n
+	- \"Consultant\" is defined as the successful Proponent to this RFP who enters into a written contract with the City of Delta.\n
+	- \"City\" refers to the City of Delta, a municipal city under the Local Government Act of the Province of British Columbia."
+}
