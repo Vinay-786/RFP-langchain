@@ -69,6 +69,10 @@ class PromptSerializer(serializers.Serializer):
         max_length=500,
         help_text="The question to be answered by the RAG system."
     )
+    project_id = serializers.IntegerField(
+        required=True,
+        help_text="ID of the project to query against."
+    )
 
 
 class ProjectRAGSerializer(serializers.Serializer):
@@ -77,3 +81,4 @@ class ProjectRAGSerializer(serializers.Serializer):
         required=True,
         help_text="ID of the project whose documents should be indexed."
     )
+

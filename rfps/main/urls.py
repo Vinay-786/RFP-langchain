@@ -5,7 +5,8 @@ from .views import (
     RFPDocumentViewSet,
     QueryRAGView,
     InsertRAGView,
-    OpenAIChat
+    OpenAIChat,
+    GenerateRFPView
 )
 
 router = DefaultRouter()
@@ -17,5 +18,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('query', QueryRAGView.as_view(), name='rag-query'),
     path('insert-rag', InsertRAGView.as_view(), name='rag-query'),
-    path('chatai', OpenAIChat.as_view(), name='openaichat')
+    path('chatai', OpenAIChat.as_view(), name='openaichat'),
+    path('generate-rfp', GenerateRFPView.as_view(), name='generate-rfp'),
 ]

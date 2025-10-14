@@ -54,3 +54,12 @@ class RFPDocument(models.Model):
 
     def __str__(self):
         return self.filename
+
+class QuestionAnswer(models.Model):
+    project = models.ForeignKey("Project", on_delete=models.SET_NULL, related_name="qa_pairs", null=True, blank=True)
+    question = models.TextField()
+    answer = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.question

@@ -21,8 +21,6 @@
 	Even if a proposal meets these, it must meet the minimum scores for certain Desirable Criteria to be considered further."
 }
 
-
-
 {
     "query": "Explain the terms and condition of the request of proposal in the document",
 
@@ -32,7 +30,67 @@
 		terms and any terms included in an addendum issued by the City of Delta.\n
 	3. Provisions in proposals that contradict the terms of the RFP will be treated as if they do not exist.\n\n
 	The document also provides specific terminology definitions:\n
-	- \"Contract\" refers to the written agreement resulting from this RFP executed by the City of Delta and the Consultant.\n
+	- \"Contract\" refers to the written agreement resulting from this RFP executed by the City of Delta and the Consultant.c
 	- \"Consultant\" is defined as the successful Proponent to this RFP who enters into a written contract with the City of Delta.\n
 	- \"City\" refers to the City of Delta, a municipal city under the Local Government Act of the Province of British Columbia."
 }
+
+{
+    "query": "What are the evaluation criteria and scoring weights for proposals?",
+    
+	"answer": "The evaluation criteria and scoring weights for proposals are as follows:\n\n
+	1. Proponent Capability and Experience - 30% weight, with a minimum score of 18 out of 30.\n
+	2. Proposed Solution, Methodology, and Work Schedule - 30% weight, with a minimum score of 18 out of 30.\n
+	3. Fee - 40% weight, with no minimum score specified."
+}
+
+{
+    "query": "What reference information and past project details should be provided?",
+    "answer": "For each past project, you should provide the project name, project location, scope of services provided, contact name, contact title, phone number, and email address. You should also highlight at least three references Delta can contact readily."
+}
+
+{
+    "query": "What dispute resolution and governing law provisions apply?",
+    "answer": "The disputes arising out of or in connection with the Agreement shall be governed by the laws of the Province of British Columbia. However, the specific dispute resolution process is not detailed in the context provided."
+}
+
+{
+    "query": "What are the City's rights regarding proposal acceptance and contract award?",
+    "answer": "The City has the right to reject all proposals if it is not satisfied with them or if it determines that none are acceptable. Furthermore, the City can terminate the Request for Proposal and negotiate with and award the contract to any other firm or firms deemed acceptable, regardless of whether they were recipients of the Request for Proposal or submitted a proposal."
+}
+
+{
+    "query": "What insurance requirements must the consultant meet?",
+    "answer": "The consultant must provide proof of insurance policies that include a cross liability clause and a waiver of subrogation, prior to the commencement of work, to the satisfaction of the City. Additionally, the consultant agrees to give the City 10 days’ written notice of any material change in, cancellation, or expiration of any policy. If the consultant hires a sub-contractor, the sub-contractor must obtain and maintain the same insurance on the same terms. These requirements do not reduce the consultant's obligations to release and indemnify the City as outlined in Section 4."
+}
+
+{
+    "query": "What are the City's rights regarding proposal acceptance and contract award?",
+    "answer": "The City has the right, in its sole discretion, to not accept any of the Proposals received if it is not satisfied with them or if it determines that none of the Proposals are acceptable for reasons the City considers to be in its best interests. The City may terminate the Request for Proposal and negotiate with and award the Contract to any other firm or firms acceptable to the City, whether or not such firms were recipients of the Request for Proposal or submitted a proposal."
+}
+
+{
+    "query": "Explain the risk-based authentication and fraud prevention requirements",
+    "answer": "The risk-based authentication and fraud prevention requirements outlined in the context include:\n\n1. Use of device ID and IP reputation to create a risk score, which governs when a user is challenged with two-factor authentication (2FA) before high-risk transactions (E.2).\n\n2. Providing functionality to monitor the riskiness of user traffic before, during, and after tasks (E.5).\n\n3. Implementing a step-up authentication process and using continuous authentication to terminate sessions of users who behave suspiciously (E.6).\n\n4. Using out-of-band 2FA to authenticate users before allowing tasks to complete and performing continuous authentication to terminate sessions of users who behave suspiciously (E.7)."
+}
+
+{
+    "query": "Describe the customization and branding requirements for user interfaces",
+    "answer": "The customization and branding requirements for user interfaces include an extensive ability to customize the design (graphics, interactions, layout, style) of the customer-facing user interfaces. This includes user registration, sign-in, sign-off, notifications, etc., to permit Delta the ability to create a unified look and feel that matches the new City of Delta website."
+}
+
+{
+    "query": "How should proponents explain their selection of sub-consultants and partners?",
+    "answer": "Proponents should identify any sub-consultants they propose to use and explain why they chose them to participate."
+}
+
+{
+    "query": "How should proponents describe their firm's primary business and capabilities?",
+    "answer": "Proponents should describe their firm's primary business, its experience, qualifications, and ability to provide the services described. They should also provide a summary of similar projects they have recently completed, including project name, project location, scope of services provided, contact name, contact title, phone number, and email address."
+}
+
+{
+    "query": "How does the City use reference checks in the evaluation process?",
+    "answer": "The City may conduct reference checks and background investigations of the Proponent and any subcontractors proposed in the proposal, using internal and/or external sources. The City can consider and rely on any relevant information received from the references and background investigations, including taking its own experience into consideration. However, conducting these checks and investigations is at the City’s sole and absolute discretion and is not a requirement."
+}
+
