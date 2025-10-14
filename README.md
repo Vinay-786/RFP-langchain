@@ -22,7 +22,16 @@
   "description": "Implementation of CIAM solution",
   "due_date": "09-10-2025 12:31",
   "value": 150000.00,
-  "stage": "Completed"
+  "stage": "Completed",
+  "manager": "itsvinay.in@gmail.com",
+  "primary_contacts_ids": [
+            {
+                "id": 1,
+                "email": "itsvinay.in@gmail.com",
+                "first_name": "Vinay",
+                "last_name": "Kumar"
+            }
+        ]
 }
 ```
 - **Response:** Created project object
@@ -44,7 +53,16 @@
   "description": "Implementation of CIAM solution",
   "due_date": "09-10-2025 12:31",
   "value": 150000.00,
-  "stage": "Completed"
+  "stage": "Completed",
+  "manager": "itsvinay.in@gmail.com",
+  "primary_contacts_ids": [
+            {
+                "id": 1,
+                "email": "itsvinay.in@gmail.com",
+                "first_name": "Vinay",
+                "last_name": "Kumar"
+            }
+        ]
 }
 ```
 - **Response:** Updated project object
@@ -73,6 +91,7 @@
 - **Request Body:** `multipart/form-data`
 ```
 document_file: <file>
+uploaded_by: <email_id>
 project: <project_id>
 ```
 - **Response:** Created document object with file metadata
@@ -89,6 +108,7 @@ project: <project_id>
 - **Request Body:** `multipart/form-data`
 ```
 document_file: <file> (optional)
+uploaded_by: <email_id>
 project: <project_id> (optional)
 ```
 - **Response:** Updated document object
