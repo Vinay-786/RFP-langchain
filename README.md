@@ -20,9 +20,9 @@
   "name": "Customer Identity Management Solution",
   "type": "Software Implementation",
   "description": "Implementation of CIAM solution",
-  "due_date": "2025-12-31",
+  "due_date": "09-10-2025 12:31",
   "value": 150000.00,
-  "stage": "planning"
+  "stage": "Completed"
 }
 ```
 - **Response:** Created project object
@@ -42,9 +42,9 @@
   "name": "Customer Identity Management Solution",
   "type": "Software Implementation",
   "description": "Implementation of CIAM solution",
-  "due_date": "2025-12-31",
+  "due_date": "09-10-2025 12:31",
   "value": 150000.00,
-  "stage": "planning"
+  "stage": "Completed"
 }
 ```
 - **Response:** Updated project object
