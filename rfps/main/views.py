@@ -101,10 +101,10 @@ class QueryRAGView(APIView):
                     )
 
                 # Get the RAG chain (initialized only the first time)
-                rag_chain = RAGService.get_rag_chain()
+                rag_chain = RAGService.get_rag_chain(project_id)
 
                 print(f"Invoking RAG chain for query: '{user_query}'")
-                answer = rag_chain.invoke(user_query)
+                answer = rag_chain.invoke({"question": user_query})
 
                 # Save Q&A (use the project we already fetched above)
                 QuestionAnswer.objects.create(
@@ -211,7 +211,7 @@ class InsertRAGView(APIView):
                 )
 
             # 4. Insert Data into Pinecone using RAGService
-            result = RAGService.insert_documents(all_chunked_docs)
+            result = RAGService.insert_documents(all_chunked_docs, project_id)
 
             return Response(
                 {
