@@ -1,5 +1,64 @@
 # RFP API Documentation
 
+## Workflow Example
+
+Here is a complete workflow example using `curl` to test the API.
+
+**Prerequisites:**
+
+*   You need an authentication token. Replace `YOUR_TOKEN` with your actual token.
+*   You need a project ID, which you get from the project creation step. Replace `PROJECT_ID` accordingly.
+*   Have a sample document ready. Replace `/path/to/your/document.docx` with the actual file path.
+
+### 1. Create a Project
+
+```bash
+curl -X POST http://127.0.0.1:8000/api/v1/projects/ \
+-H "Authorization: Token YOUR_TOKEN" \
+-H "Content-Type: application/json" \
+-d '{
+    "name": "Project Alpha",
+    "description": "Initial test project for RAG.",
+    "type": "Technology",
+    "stage": "discovery",
+    "due_date": "2025-12-31",
+    "value": 50000
+}'
+```
+
+### 2. Upload a Document
+
+```bash
+curl -X POST http://127.0.0.1:8000/api/v1/documents/ \
+-H "Authorization: Token YOUR_TOKEN" \
+-H "Content-Type: multipart/form-data" \
+-F "project=PROJECT_ID" \
+-F "document_file=@/path/to/your/document.docx"
+```
+
+### 3. Insert Document into RAG
+
+```bash
+curl -X POST http://127.0.0.1:8000/api/v1/insert-rag \
+-H "Authorization: Token YOUR_TOKEN" \
+-H "Content-Type: application/json" \
+-d '{
+    "project_id": "PROJECT_ID"
+}'
+```
+
+### 4. Query the RAG
+
+```bash
+curl -X POST http://127.0.0.1:8000/api/v1/query \
+-H "Authorization: Token YOUR_TOKEN" \
+-H "Content-Type: application/json" \
+-d '{
+    "project_id": "PROJECT_ID",
+    "prompt": "What is the main topic of the document?"
+}'
+```
+
 ## API Endpoints
 
 ### 1. Projects

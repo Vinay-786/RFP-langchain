@@ -18,11 +18,10 @@ from django.conf import settings
 from pathlib import Path
 from datetime import datetime
 from docx import Document
-from docx.shared import Pt, RGBColor, Inches
+from docx.shared import Pt, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from io import BytesIO
 from django.http import HttpResponse
-
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -114,7 +113,7 @@ class QueryRAGView(APIView):
                 )
 
                 return Response(
-                    {"query": user_query, "answer": answer}, 
+                    {"query": user_query, "answer": answer},
                     status=status.HTTP_200_OK
                 )
 
@@ -129,6 +128,7 @@ class QueryRAGView(APIView):
                 )
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class InsertRAGView(APIView):
     """
@@ -286,7 +286,7 @@ class GenerateRFPView(APIView):
             # Fetch the project
             project = Project.objects.get(pk=project_id)
 
-            # Fetch unique Q&A pairs 
+            # Fetch unique Q&A pairs
             qa_pairs = []
             seen_questions = set()
 
@@ -296,26 +296,26 @@ class GenerateRFPView(APIView):
 
             for qa in all_qas:
                 question_normalized = qa.question.strip().lower()
-                
+
                 # Skip if question already seen
                 if question_normalized in seen_questions:
                     continue
-                
+
                 # Skip if answer is unhelpful
                 if qa.answer.strip() == "I don't have enough information to answer that.":
-                    print(f"Skipping Q&A with no answer: {qa.question[:50]}...")
+                    print(
+                        f"Skipping Q&A with no answer: {qa.question[:50]}...")
                     continue
-                
+
                 # Only add if it passes both checks
                 qa_pairs.append(qa)
                 seen_questions.add(question_normalized)
-                
 
             if not qa_pairs:
                 return Response(
                     {
                         "error": "No Q&A history found for this project. "
-                                "Please query the RAG system first to gather information."
+                        "Please query the RAG system first to gather information."
                     },
                     status=status.HTTP_400_BAD_REQUEST,
                 )
@@ -324,7 +324,8 @@ class GenerateRFPView(APIView):
             context = self._build_context_from_qa(qa_pairs)
 
             # Generate comprehensive RFP content using GPT
-            print(f"Generating AI-powered RFP content for project: {project.name}")
+            print(
+                f"Generating AI-powered RFP content for project: {project.name}")
             rfp_content = self._generate_rfp_content_with_gpt(project, context)
 
             # Create formatted Word document
@@ -338,14 +339,14 @@ class GenerateRFPView(APIView):
             # --- Save to server (media/generated_rfps/YYYY/MM/DD/) ---
             # Generate filename
             filename = f'{project.name.replace(" ", "_")}_RFP_Response.docx'
-            
+
             # Create directory structure: generated_rfps/2025/10/11/
             current_date = datetime.now()
             generated_rfps_dir = Path(settings.MEDIA_ROOT) / 'generated_rfps' / \
-                                current_date.strftime('%Y') / \
-                                current_date.strftime('%m') / \
-                                current_date.strftime('%d')
-            
+                current_date.strftime('%Y') / \
+                current_date.strftime('%m') / \
+                current_date.strftime('%d')
+
             # Create all necessary directories
             generated_rfps_dir.mkdir(parents=True, exist_ok=True)
 
@@ -366,7 +367,7 @@ class GenerateRFPView(APIView):
                 buffer.getvalue(),
                 content_type='application/vnd.openxmlformats-officedocument.wordprocessingml.document'
             )
-            
+
             response['Content-Disposition'] = f'attachment; filename="{filename}"'
 
             return response
@@ -397,7 +398,7 @@ class GenerateRFPView(APIView):
             context_parts.append(f"Q{idx}: {qa.question}")
             context_parts.append(f"A{idx}: {qa.answer}")
             context_parts.append("---")
-        
+
         return "\n".join(context_parts)
 
     def _generate_rfp_content_with_gpt(self, project, context):
@@ -445,7 +446,7 @@ class GenerateRFPView(APIView):
         print("Calling GPT to generate RFP content...")
         rfp_content = chat_with_gpt(messages)
         print("GPT generation complete.")
-        
+
         return rfp_content
 
     def _create_word_document(self, project, ai_generated_content, qa_pairs):
@@ -459,16 +460,16 @@ class GenerateRFPView(APIView):
         # Title
         title = doc.add_heading(f'Request for Proposal Response', level=0)
         title.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        
+
         subtitle = doc.add_heading(project.name, level=1)
         subtitle.alignment = WD_ALIGN_PARAGRAPH.CENTER
-        
+
         doc.add_paragraph()  # Spacing
 
         # Project Metadata Table
         details_table = doc.add_table(rows=6, cols=2)
         details_table.style = 'Light Grid Accent 1'
-        
+
         details_data = [
             ('Project Type', project.type),
             ('Due Date', project.due_date.strftime('%B %d, %Y')),
@@ -489,13 +490,13 @@ class GenerateRFPView(APIView):
         # ============== AI-GENERATED CONTENT ==============
         # Parse and format the AI-generated content
         lines = ai_generated_content.split('\n')
-        
+
         for line in lines:
             line = line.strip()
-            
+
             if not line:
                 continue
-            
+
             # Check for markdown headers
             if line.startswith('## '):
                 # Main section header
@@ -523,13 +524,13 @@ class GenerateRFPView(APIView):
 
         doc.add_page_break()
         doc.add_heading('Appendix A: Question & Answer Reference', level=1)
-        
+
         appendix_intro = doc.add_paragraph(
             'The following questions and answers were gathered during the discovery phase '
             'and informed the content of this proposal.'
         )
         appendix_intro.italic = True
-        
+
         doc.add_paragraph()
 
         for idx, qa in enumerate(qa_pairs, 1):
@@ -538,12 +539,12 @@ class GenerateRFPView(APIView):
             q_run = q_paragraph.add_run(f'Q{idx}: {qa.question}')
             q_run.font.bold = True
             q_run.font.size = Pt(11)
-            
+
             # Answer
             a_paragraph = doc.add_paragraph()
             a_run = a_paragraph.add_run(f'A: {qa.answer}')
             a_run.font.size = Pt(10)
-            
+
             doc.add_paragraph()  # Spacing
 
         doc.add_page_break()
@@ -557,4 +558,3 @@ class GenerateRFPView(APIView):
         footer_para.alignment = WD_ALIGN_PARAGRAPH.CENTER
 
         return doc
-

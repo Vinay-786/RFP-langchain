@@ -10,6 +10,7 @@ from langchain.schema.runnable import RunnableLambda
 
 load_dotenv()
 
+
 class PineconeManager:
     """A class to manage Pinecone index operations and RAG pipeline creation."""
 
@@ -27,7 +28,8 @@ class PineconeManager:
     def create_or_connect_vectorstore(self, documents=None):
         if self.index_name not in self.pc.list_indexes().names():
             if not documents:
-                raise ValueError("Documents must be provided to create a new index.")
+                raise ValueError(
+                    "Documents must be provided to create a new index.")
             print(f"🌲 Creating new Pinecone index: {self.index_name}")
             self.pc.create_index(
                 name=self.index_name,
@@ -35,7 +37,8 @@ class PineconeManager:
                 metric="cosine",
                 spec=ServerlessSpec(cloud="aws", region="us-east-1"),
             )
-        print(f"🌲 Connecting to Pinecone index '{self.index_name}' under namespace '{self.namespace}'")
+        print(
+            f"🌲 Connecting to Pinecone index '{self.index_name}' under namespace '{self.namespace}'")
         self.vectorstore = PineconeVectorStore.from_existing_index(
             index_name=self.index_name,
             embedding=self.embedding_model,
@@ -68,7 +71,8 @@ class PineconeManager:
         """
         prompt = PromptTemplate.from_template(prompt_template)
         rag_chain = (
-            {"context": RunnableLambda(lambda x: retriever.invoke(x["question"])), "question": RunnablePassthrough()}
+            {"context": RunnableLambda(lambda x: retriever.invoke(
+                x["question"])), "question": RunnablePassthrough()}
             | prompt
             | llm
             | StrOutputParser()
